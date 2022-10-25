@@ -63,3 +63,38 @@ exports.addQuestion = (req, res) => {
       res.status(500).send();
     })
 }
+
+exports.addAnswer = (req, res) => {
+  let q_id = req.params.question_id;
+  let body = req.body;
+  db.query(`WITH new_answer AS (
+              INSERT INTO answers (answer_id, question_id, answer_body, answer_date, answer_name, answer_email, reported, answer_helpfulness)
+              VALUES (
+                (SELECT MAX(answer_id) FROM answers) + 1,
+                 $1, $2,
+                 (extract(epoch from now()) * 1000),
+                 $3, $4,
+                 false,
+                 0
+                ) RETURNING answer_id
+              )
+              INSERT INTO photos (answer_id, photo_url)
+              VALUES (
+                (SELECT answer_id FROM new_answer),
+                (unnest($5::varchar[]))
+              )`, [q_id, body.body, body.name, body.email, body.photos])
+  .then(() => {
+    res.status(201).send();
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).send();
+  })
+}
+                // ${q_id},
+                // '${body.body}',
+                                // '${body.name}',
+                // '${body.email}',
+exports.addHelpful = (req, res) => {
+  let q_id = req.params.question_id;
+}
