@@ -9,7 +9,8 @@ const { getQuestions,
         addAnswer,
         addQHelpful,
         addQReport,
-        addAHelpful
+        addAHelpful,
+        addAReport
       } = require('./controllers/qa.js');
 
 router.get("/", (req, res) => {
@@ -39,11 +40,15 @@ router.put('/qa/questions/:question_id/helpful', (req, res) => {
 
 router.put('/qa/questions/:question_id/report', (req, res) => {
   addQReport(req, res);
-})
+});
 
 router.put('/qa/answers/:answer_id/helpful', (req, res) => {
   addAHelpful(req, res);
-})
+});
+
+router.put('/qa/answers/:answer_id/report', (req, res) => {
+  addAReport(req, res);
+});
 
 app.use(router);
 

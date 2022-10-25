@@ -136,3 +136,18 @@ exports.addAHelpful = (req, res) => {
       res.status(500).send();
     })
 }
+
+exports.addAReport = (req, res) => {
+  let a_id = req.params.answer_id;
+  db.query(`UPDATE answers
+            SET reported = true
+            WHERE answer_id = ${a_id}`)
+    .then((result) => {
+      console.log(result);
+      res.status(204).send();
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send();
+    })
+}
