@@ -92,10 +92,25 @@ exports.addAnswer = (req, res) => {
   })
 }
 
-exports.addHelpful = (req, res) => {
+exports.addQHelpful = (req, res) => {
   let q_id = req.params.question_id;
   db.query(`UPDATE questions
             SET question_helpfulness = question_helpfulness + 1
+            WHERE question_id = ${q_id}`)
+    .then((result) => {
+      console.log(result);
+      res.status(204).send();
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send();
+    })
+}
+
+exports.addQReport = (req, res) => {
+  let q_id = req.params.question_id;
+  db.query(`UPDATE questions
+            SET reported = true
             WHERE question_id = ${q_id}`)
     .then((result) => {
       console.log(result);

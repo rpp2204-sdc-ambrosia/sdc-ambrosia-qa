@@ -3,7 +3,13 @@ let app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 let router = express.Router();
-const { getQuestions, getAnswers, addQuestion, addAnswer, addHelpful } = require('./controllers/qa.js');
+const { getQuestions,
+        getAnswers,
+        addQuestion,
+        addAnswer,
+        addQHelpful,
+        addQReport
+      } = require('./controllers/qa.js');
 
 router.get("/", (req, res) => {
   res.status(200).send('Server connection works');
@@ -27,8 +33,12 @@ router.post('/qa/questions/:question_id/answers', (req, res) => {
 });
 
 router.put('/qa/questions/:question_id/helpful', (req, res) => {
-  addHelpful(req,res);
+  addQHelpful(req,res);
 });
+
+router.put('/qa/questions/:question_id/report', (req, res) => {
+  addQReport(req, res);
+})
 
 app.use(router);
 
