@@ -25,20 +25,25 @@ exports.getQuestions = (req, res) => {
 exports.getAnswers = (req, res) => {
   let q_id = req.params.question_id;
   db.query(`SELECT
-             answer_id,
+             answers.answer_id,
              question_id,
              answer_body,
              to_timestamp(answer_date/1000)::date,
              answer_name,
              answer_email,
              reported,
-             answer_helpfulness
-           FROM answers WHERE question_id = ${q_id} AND reported = false`)
+             answer_helpfulness,
+             photo_url
+           FROM answers
+           LEFT JOIN photos
+           ON answers.answer_id = photos.answer_id
+           WHERE answers.question_id = ${q_id} AND answers.reported = false`)
     .then((data) => {
       console.log(data.rows);
       res.status(200).send(data.rows);
     })
     .catch(err => {
+      console.log(err);
       res.status(500).send();
     })
 };
