@@ -52,8 +52,11 @@ router.put('/qa/answers/:answer_id/report', (req, res) => {
 
 app.use(router);
 
+module.exports = app;
+
 const port = 6001;
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
+
